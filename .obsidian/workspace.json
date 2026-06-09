@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "cloud-platform/stripe/overview.md",
+                "file": "cloud-platform/processes/deployment/problem.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "overview"
+              "title": "problem"
             }
           }
         ]
@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "01a426a903ce513b",
@@ -185,8 +186,14 @@
   },
   "active": "c6a583b7ee118d2d",
   "lastOpenFiles": [
-    "cloud-platform/stripe/diagrams/green-model.svg",
+    "cloud-platform/processes/deployment/problem.md.tmp.81357.a049894355ac",
+    "cloud-platform/processes/deployment/overview.md",
     "cloud-platform/stripe/overview.md",
+    "cloud-platform/processes/deployment/problem.md",
+    "cloud-platform/processes/deployment/problem.md.tmp.81357.d442c1010e29",
+    "cloud-platform/processes/deployment",
+    "cloud-platform/processes",
+    "cloud-platform/stripe/diagrams/green-model.svg",
     "cloud-platform/stripe/tax.md",
     "cloud-platform/stripe/diagrams/mmdc.json",
     "cloud-platform/stripe/diagrams/red-model.svg",
@@ -202,10 +209,7 @@
     "cloud-platform/stripe/future-implementation.md",
     "cloud-platform/stripe/future-implementation.md.tmp.45971.be32a4a782da",
     "cloud-platform/stripe/accounts/accounts-v2-reference.md",
-    "cloud-platform/stripe/accounts",
-    "cloud-platform/stripe/future-implementation.md.tmp.45971.384850bce240",
     "component-library/shadcn-registry-migration/review.md",
-    "cloud-platform/stripe/curl-logs/response-log.md.tmp.86970.0778efcc315a",
     "cloud-platform/stripe/accounts-v2-reference.md",
     "cloud-platform/stripe/curl-logs/response-log.md",
     "cloud-platform/stripe/curl-logs/curl-log.md",
@@ -221,8 +225,6 @@
     "cloud-platform/components/app-service/api/overview.md",
     "cloud-platform/README.md",
     "component-library/tickets/CP-3819.md",
-    "component-library/tickets/PRO-3573.md",
-    "component-library/tickets/ticket-template.md",
-    "component-library/shadcn-registry-migration/scanned-content.md"
+    "component-library/tickets/PRO-3573.md"
   ]
 }
