@@ -1,0 +1,40 @@
+{
+  "x-generator": "NSwag v14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "App-Service Webhook API",
+    "description": "Stripe webhook receiver for the JTL Platform App Service",
+    "version": "v1"
+  },
+  "paths": {
+    "/webhooks/stripe": {
+      "post": {
+        "tags": ["Webhooks"],
+        "summary": "Stripe webhook receiver",
+        "description": "Verifies the Stripe-Signature header and schedules a HandleStripeWebhookCommand for routing.",
+        "operationId": "JTLPlatformAppServiceModulesPaymentApiEndpointsWebhooksStripeWebhookEndpoint",
+        "responses": {
+          "204": {
+            "description": "Event received"
+          },
+          "400": {
+            "description": "MissingRequiredHeaders"
+          },
+          "412": {
+            "description": "StripeVerificationFailed"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "JWTBearerAuth": {
+        "type": "http",
+        "description": "Enter a JWT token to authorize the requests...",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

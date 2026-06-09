@@ -1,0 +1,16 @@
+flowchart TD
+    subgraph Correct ["✅ Correct (Destination Charges)"]
+        direction TB
+        C1[Customer]
+        P1[Product]
+        S1[Subscription]
+        PlatformJTL[(Platform JTL)]
+        Express1[(Express Account<br>acct_xxx)]
+
+        C1 --> PlatformJTL
+        P1 --> PlatformJTL
+        S1 --> PlatformJTL
+        PlatformJTL -.-> |"transfer_data[destination]<br>application_fee_percent"| Express1
+    end
+
+    style Correct fill:#f2fbf2,stroke:#2eb82e,stroke-width:2px

@@ -1,0 +1,228 @@
+{
+  "main": {
+    "id": "693bb66bc2eb3aab",
+    "type": "split",
+    "children": [
+      {
+        "id": "a552b56992d67cb8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c6a583b7ee118d2d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "cloud-platform/stripe/overview.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "overview"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "c0a7ffd0111e6237",
+    "type": "split",
+    "children": [
+      {
+        "id": "f11d3f85d0201625",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ba7a4c20ba76ac75",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "b7cff7f71629e76b",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "553ed3b9bac8ba4a",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "01a426a903ce513b",
+    "type": "split",
+    "children": [
+      {
+        "id": "e3e51f1e56a05f21",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8d71e3a8158c6634",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "excalidraw/Partner Portal.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Partner Portal"
+            }
+          },
+          {
+            "id": "974d3273fe4ffbaa",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "excalidraw/Partner Portal.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Partner Portal"
+            }
+          },
+          {
+            "id": "d00eaa3dceae1f0b",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "05d70450ddc5c650",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "94434873986fdc00",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "excalidraw/Partner Portal.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Partner Portal"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "c6a583b7ee118d2d",
+  "lastOpenFiles": [
+    "cloud-platform/stripe/diagrams/green-model.svg",
+    "cloud-platform/stripe/overview.md",
+    "cloud-platform/stripe/tax.md",
+    "cloud-platform/stripe/diagrams/mmdc.json",
+    "cloud-platform/stripe/diagrams/red-model.svg",
+    "cloud-platform/stripe/diagrams/mermaid-diagram-2026-06-09-112953.svg",
+    "cloud-platform/stripe/diagrams/mermaid-diagram-2026-06-09-112924.svg",
+    "cloud-platform/stripe/diagrams/green-model.mmd",
+    "cloud-platform/stripe/diagrams/red-model.mmd",
+    "cloud-platform/stripe/diagrams",
+    "cloud-platform/stripe/tax.md.tmp.59705.a5a232744427",
+    "cloud-platform/stripe/implementation-guide.md",
+    "cloud-platform/stripe/tools",
+    "cloud-platform/stripe/review.md",
+    "cloud-platform/stripe/future-implementation.md",
+    "cloud-platform/stripe/future-implementation.md.tmp.45971.be32a4a782da",
+    "cloud-platform/stripe/accounts/accounts-v2-reference.md",
+    "cloud-platform/stripe/accounts",
+    "cloud-platform/stripe/future-implementation.md.tmp.45971.384850bce240",
+    "component-library/shadcn-registry-migration/review.md",
+    "cloud-platform/stripe/curl-logs/response-log.md.tmp.86970.0778efcc315a",
+    "cloud-platform/stripe/accounts-v2-reference.md",
+    "cloud-platform/stripe/curl-logs/response-log.md",
+    "cloud-platform/stripe/curl-logs/curl-log.md",
+    "cloud-platform/stripe/solution-docs/md/jtl-billing-connect-solution-plan.md",
+    "cloud-platform/stripe/solution-docs/md/summary.md",
+    "cloud-platform/stripe/tools/cli-stripe.md",
+    "cloud-platform/tickets/CP-3829.md",
+    "cloud-platform/components/app-service/api/dtos.md",
+    "cloud-platform/tickets/CP-3828.md",
+    "cloud-platform/components/app-service/api/api.md",
+    "cloud-platform/components/app-service/sdks/overview.md",
+    "cloud-platform/components/app-service/index.md",
+    "cloud-platform/components/app-service/api/overview.md",
+    "cloud-platform/README.md",
+    "component-library/tickets/CP-3819.md",
+    "component-library/tickets/PRO-3573.md",
+    "component-library/tickets/ticket-template.md",
+    "component-library/shadcn-registry-migration/scanned-content.md"
+  ]
+}

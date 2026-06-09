@@ -1,0 +1,15 @@
+flowchart TD
+    subgraph Wrong ["❌ Current (Per-Publisher Data Isolation)"]
+        direction TB
+        PlatformJTL[(Platform JTL<br>admin only)]
+        subgraph Express1 ["Express Account (acct_xxx)"]
+            direction TB
+            C1[Customer]
+            P1[Product]
+            S1[Subscription]
+        end
+
+        PlatformJTL -.-> |"administers"| Express1
+    end
+
+    style Wrong fill:#fdf2f2,stroke:#e62e2e,stroke-width:2px

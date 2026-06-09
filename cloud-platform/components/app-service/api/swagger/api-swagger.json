@@ -1,0 +1,5486 @@
+{
+  "x-generator": "NSwag v14.4.0.0 (NJsonSchema v11.3.2.0 (Newtonsoft.Json v13.0.0.0))",
+  "openapi": "3.0.0",
+  "info": {
+    "title": "App-Service API",
+    "description": "App-Service API for JTL Platform",
+    "version": "v1"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["Root"],
+        "summary": "Root endpoint",
+        "description": "This is the root endpoint of the JTL.Platform App Service.",
+        "operationId": "Root",
+        "responses": {
+          "200": {
+            "description": "The root endpoint",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmptyResponse"
+                },
+                "example": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/publishers/{id}/profile": {
+      "patch": {
+        "tags": ["Publishers"],
+        "summary": "Update the profile of a publisher",
+        "description": "Updates the profile of a publisher. Supports partial updates for name, focus areas, business address, and business email.",
+        "operationId": "UpdatePublisherProfile",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the publisher",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "UpdatePublisherProfileRequest",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePublisherProfileRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "The updated publisher profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublisherDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/publishers/register": {
+      "post": {
+        "tags": ["Publishers"],
+        "summary": "Register a new publisher",
+        "description": "Registers a new publisher. The legal agreement must be accepted.",
+        "operationId": "RegisterPublisher",
+        "requestBody": {
+          "x-name": "RegisterPublisherRequest",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterPublisherRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "The created publisher",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublisherDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/publishers": {
+      "get": {
+        "tags": ["Publishers"],
+        "summary": "Query publishers",
+        "description": "Queries publishers.",
+        "operationId": "QueryPublishers",
+        "parameters": [
+          {
+            "name": "only-publishers-of-tenant",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The publishers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PublisherDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/publishers/{id}/payment/invoices": {
+      "get": {
+        "tags": ["Publishers"],
+        "summary": "List invoices for a publisher's payment account",
+        "description": "Returns a cursor-paginated page of Stripe invoices for the publisher's Connected Account. Use 'pageSize' (1–100) to control the page size and 'nextToken' from the previous response to fetch the next page.",
+        "operationId": "QueryPublisherPaymentInvoices",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the publisher",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Gets or sets the invoice status to filter by (e.g. paid, open, draft, void, uncollectible).",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "createdAfter",
+            "in": "query",
+            "description": "Gets or sets the inclusive lower bound for the invoice creation date.",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            }
+          },
+          {
+            "name": "createdBefore",
+            "in": "query",
+            "description": "Gets or sets the exclusive upper bound for the invoice creation date.",
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Optional. Number of invoices per page (1–100).",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "nextToken",
+            "in": "query",
+            "description": "Optional. Cursor returned by the previous response to fetch the next page.",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of invoices",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CursorPaginationResponseOfQueryPublisherPaymentInvoicesResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Tenant is not a registered seller, or user lacks PartnerPortal access"
+          },
+          "404": {
+            "description": "Publisher does not exist"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/publishers/{id}": {
+      "get": {
+        "tags": ["Publishers"],
+        "summary": "Get a publisher by id",
+        "description": "Gets a publisher by id. The publisher must be the owner of the app.",
+        "operationId": "GetPublisher",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the publisher",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The publisher",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublisherDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/publishers/{id}/payment/dashboard-url": {
+      "post": {
+        "tags": ["Publishers"],
+        "summary": "Create a payment dashboard login link for a publisher",
+        "description": "Returns a single-use payment dashboard URL. The link is generated fresh on every call — do not cache the result.",
+        "operationId": "CreatePublisherPaymentDashboardUrl",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the publisher",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The single-use payment dashboard URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatePublisherPaymentDashboardUrlResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Tenant is not a registered seller, or user lacks PartnerPortal access"
+          },
+          "404": {
+            "description": "Publisher does not exist"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/publishers/{id}/payment/onboarding-url": {
+      "post": {
+        "tags": ["Publishers"],
+        "summary": "Create a Stripe onboarding URL for a publisher",
+        "description": "Returns a single-use Stripe-hosted Express onboarding URL. Creates the underlying Stripe Connected Account on first call and reuses it on subsequent calls.",
+        "operationId": "CreateStripeOnboardingUrl",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the publisher",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The Stripe onboarding URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatePaymentOnboardingUrlResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Tenant is not a registered seller or publisher does not belong to request tenant."
+          },
+          "404": {
+            "description": "Publisher does not exist for the current tenant"
+          },
+          "409": {
+            "description": "Publisher Stripe account is already fully connected"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/customer/billing/portal-session": {
+      "post": {
+        "tags": ["Customer"],
+        "summary": "Create a Stripe billing portal session URL for a customer associated with the tenant.",
+        "description": "Returns a single-use Stripe-hosted Express billing portal URL. Creates the underlying Stripe Connected Account on first call and reuses it on subsequent calls.",
+        "operationId": "JTLPlatformAppServiceModulesCoreApiEndpointsPaymentCreateBillingPortalSessionCreateBillingPortalSessionEndpoint",
+        "requestBody": {
+          "x-name": "CreateBillingPortalSessionRequest",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBillingPortalSessionRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "The Stripe customer billing portal URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateBillingPortalSessionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Stripe customer of tenant not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/partner/app-listings": {
+      "get": {
+        "tags": ["Partner"],
+        "summary": "Query partner app listing overviews",
+        "description": "Returns paginated, localized app listing overviews scoped to the authenticated partner's publisher. Supports search by listing name and filter by listing version status.",
+        "operationId": "QueryPartnerAppListingOverviews",
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "Optional BCP-47 locale for localization (e.g. \"de\", \"en\").",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Gets or sets a case-insensitive name search term. Optional.",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Gets or sets a listing version status filter. Optional; all statuses returned when omitted.",
+            "schema": {
+              "nullable": true,
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/AppListingVersionStatus"
+                }
+              ]
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Gets or sets the number of items to include per page.\nMust be greater than 0 and not exceed MaxPageSize.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "description": "Gets or sets the current page number. Must be greater than 0.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "returnAll",
+            "in": "query",
+            "description": "Gets or sets a value indicating whether all results should be returned, ignoring pagination.",
+            "schema": {
+              "type": "boolean",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated localized app listing overviews",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginationResponseDtoOfAppListingLocalizedDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized — requester lacks Partner Portal access"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/app-listings/{slug}/media/screenshots": {
+      "post": {
+        "tags": ["App-Listings"],
+        "summary": "Upload a screenshot image",
+        "description": "Validates and uploads a screenshot to blob storage. Returns the image URL; append it via PUT /app-listings/{slug}.",
+        "operationId": "UploadMediaScreenshot",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "Gets or sets the app listing slug (route parameter).",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "UploadMediaScreenshotRequest",
+          "description": "",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadMediaScreenshotRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "The uploaded screenshot URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadMediaScreenshotResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "File too large"
+          },
+          "415": {
+            "description": "Unsupported image format"
+          },
+          "422": {
+            "description": "Image dimensions exceed 1024x1024 or corrupted file"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/app-listings/{slug}/media/icons": {
+      "post": {
+        "tags": ["App-Listings"],
+        "summary": "Upload an icon image",
+        "description": "Validates and uploads an icon (icon-light or icon-dark) to blob storage. Returns the image URL; persist it via PUT /app-listings/{slug}.",
+        "operationId": "UploadMediaIcon",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "Gets or sets the app listing slug (route parameter).",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "UploadMediaIconRequest",
+          "description": "",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadMediaIconRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "The uploaded icon URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadMediaIconResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "File too large"
+          },
+          "415": {
+            "description": "Unsupported image format"
+          },
+          "422": {
+            "description": "Invalid image dimensions or corrupted file"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/store/apps/{slug}/images": {
+      "post": {
+        "tags": ["Store"],
+        "summary": "Upload an app image",
+        "description": "Uploads an app icon image (icon-light or icon-dark) with validation and stores it in Azure Blob Storage.",
+        "operationId": "UploadAppImage",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "Gets or sets the app listing slug (route parameter).",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "UploadAppImageRequest",
+          "description": "",
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadAppImageRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "The uploaded image details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadAppImageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid image type"
+          },
+          "404": {
+            "description": "App listing not found"
+          },
+          "409": {
+            "description": "Duplicate icon type - icon already exists"
+          },
+          "413": {
+            "description": "File too large"
+          },
+          "415": {
+            "description": "Unsupported image format"
+          },
+          "422": {
+            "description": "Invalid image dimensions, low DPI, or corrupted image file"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/app-listings/{slug}": {
+      "put": {
+        "tags": ["App-Listings"],
+        "summary": "Update the app listing",
+        "description": "Updates an existing app listing. Draft status updates in-place; Submitted status creates a new version with a semantic version bump.",
+        "operationId": "UpdateAppListing",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "The slug of the app listing",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "body",
+          "description": "Gets or sets the request body containing update details.",
+          "content": {
+            "*/*": {
+              "schema": {
+                "$ref": "#/components/schemas/AppListingInputDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated app listing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppListingDto"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No changes were made to the app listing"
+          },
+          "412": {
+            "description": "Publisher is not active"
+          },
+          "409": {
+            "description": "App listing version status is not valid for update"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": ["App-Listings"],
+        "summary": "Retrieves the app listing for a given app.",
+        "description": "Retrieves the app listing for a given app.",
+        "operationId": "GetAppListing",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "The slug of the app listing to retrieve",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "The locale for which to retrieve the app listing",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The localized app listing for the specified app and locale",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppListingLocalizedDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No app listing found for the specified app and locale"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["App-Listings"],
+        "summary": "Delete an app listing",
+        "description": "Deletes the listing record, all listing versions, and all media blobs. The listing must be in Draft status and the app must have no active installations.",
+        "operationId": "DeleteAppListing",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "The slug of the app listing",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The app listing was deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmptyResponse"
+                },
+                "example": {}
+              }
+            }
+          },
+          "404": {
+            "description": "The app listing is not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmptyResponse"
+                },
+                "example": {}
+              }
+            }
+          },
+          "412": {
+            "description": "AppInstanceAvailable"
+          },
+          "401": {
+            "description": "UnauthorizedAccess"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/apps/{appInstanceId}/status": {
+      "put": {
+        "tags": ["Apps"],
+        "summary": "Update the status of an app instance",
+        "description": "Updates the status of an app instance. The app must be the owner of the app instance.",
+        "operationId": "UpdateAppInstanceStatus",
+        "parameters": [
+          {
+            "name": "appInstanceId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the app instance",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "UpdateAppInstanceStatusRequest",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAppInstanceStatusRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "The updated app instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppInstanceCompositeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/apps/{id}/metadata": {
+      "patch": {
+        "tags": ["Apps"],
+        "summary": "Update AppInstance Metadata",
+        "description": "Updates the metadata of an app instance.",
+        "operationId": "UpdateAppInstanceMetadata",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the app instance",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "UpdateAppInstanceMetadataRequest",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAppInstanceMetadataRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "The updated metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["Apps"],
+        "summary": "Replace AppInstance Metadata",
+        "description": "Replaces the metadata of an app instance.",
+        "operationId": "ReplaceAppInstanceMetadata",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the app instance",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "metadata",
+          "description": "Gets or sets the metadata dictionary to replace the existing metadata.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": ["Apps"],
+        "summary": "Get AppInstance Metadata",
+        "description": "Retrieves the metadata of an app instance.",
+        "operationId": "GetAppInstanceMetadata",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the app instance",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The metadata of the app instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/store/apps/{appId}/manifest": {
+      "put": {
+        "tags": ["Store"],
+        "summary": "Update the manifest of an app",
+        "description": "Updates the manifest of an existing app. The user should be the owner of the app.",
+        "operationId": "UpdateApp",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the app",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "body",
+          "description": "Gets or sets the body of the request.",
+          "content": {
+            "*/*": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAppRequest_UpdateAppBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated app",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppCompositeDto"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No changes were made to the app"
+          },
+          "400": {
+            "description": "Terms and conditions must not be unaccepted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/apps/{id}": {
+      "delete": {
+        "tags": ["Apps"],
+        "summary": "Uninstall an app instance",
+        "description": "Uninstalls an app instance. The app must be the owner of the app instance.",
+        "operationId": "UninstallAppInstance",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the app instance",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The app instance was uninstalled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmptyResponse"
+                },
+                "example": {}
+              }
+            }
+          },
+          "504": {
+            "description": "Timeout getting response from Wawi"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": ["Apps"],
+        "summary": "Get AppInstance",
+        "description": "Retrieves an app instance of the specific tenant.",
+        "operationId": "GetAppInstance",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the app instance",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The app instance with denormalised listing fields at the root; legacy composite fields (appInstance, listing) included beside them during BC.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppInstanceCompositeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": ["Apps"],
+        "summary": "Configure an app instance",
+        "description": "Configures an app instance. The app must be the owner of the app instance.",
+        "operationId": "ConfigureAppInstance",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the app instance",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "ConfigureAppInstanceRequest",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfigureAppInstanceRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "The updated app instance with denormalised listing fields at the root; legacy composite fields (appInstance, listing) included beside them during BC.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppInstanceCompositeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/app-listings/{slug}/submit": {
+      "put": {
+        "tags": ["App-Listings"],
+        "summary": "Submit an app listing for review",
+        "description": "Transitions the app listing from Draft to Submitted status. The listing's app must be provisioned.",
+        "operationId": "SubmitAppListing",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "The slug of the app listing",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "The locale for which to localize the response",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The submitted app listing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppListingLocalizedDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "AppListingIsNotDraft"
+          },
+          "412": {
+            "description": "AppStatusInvalid"
+          },
+          "401": {
+            "description": "UnauthorizedAccess"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/store/activation-codes/{activationCode}/redeem": {
+      "post": {
+        "tags": ["Store"],
+        "summary": "Redeem Activation Code",
+        "description": "Redeems an activation code for the current tenant.",
+        "operationId": "RedeemActivationCode",
+        "parameters": [
+          {
+            "name": "activationCode",
+            "in": "path",
+            "required": true,
+            "description": "The activation code to be redeemed.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Activation code successfully redeemed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RedeemActivationCodeResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict occurs when: the activation code is not active, the maximum redemptions has been reached, or the code was already redeemed by this tenant"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/tenants/apps": {
+      "get": {
+        "tags": ["Tenants"],
+        "summary": "Query tenant-scoped apps",
+        "description": "Returns public apps plus apps installed by the specified tenant. Requires a valid X-Tenant-Id header.",
+        "operationId": "QueryTenantApps",
+        "parameters": [
+          {
+            "name": "publisherId",
+            "in": "query",
+            "description": "Filters apps by the publisher's unique identifier.",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "onlyAppsOfTenant",
+            "in": "query",
+            "description": "Set to true to only return apps that are owned by the tenant's publisher.",
+            "schema": {
+              "type": "boolean",
+              "nullable": true
+            }
+          },
+          {
+            "name": "promotionStatus",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "description": "Filters apps by promotion statuses.",
+            "schema": {
+              "type": "array",
+              "nullable": true,
+              "items": {
+                "$ref": "#/components/schemas/AppPromotionStatus"
+              }
+            }
+          },
+          {
+            "name": "provisioningStatus",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "description": "Optional provisioning statuses to filter apps by their provisioning state.",
+            "schema": {
+              "type": "array",
+              "nullable": true,
+              "items": {
+                "$ref": "#/components/schemas/AppProvisioningStatus"
+              }
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Full-text search query to filter apps by name.",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "returnAll",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Apps visible to the tenant, including IsInstalled status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginationResponseDtoOfQueryTenantAppsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "X-Tenant-Id header is missing or not a valid GUID."
+          },
+          "401": {
+            "description": "JWT token is missing or invalid."
+          },
+          "403": {
+            "description": "User does not have access to the specified tenant."
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/store/apps": {
+      "get": {
+        "tags": ["Store"],
+        "summary": "Query public store apps",
+        "description": "Returns publicly available apps.",
+        "operationId": "QueryApps",
+        "parameters": [
+          {
+            "name": "publisherId",
+            "in": "query",
+            "description": "Filters apps by the publisher's unique identifier.",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "onlyAppsOfTenant",
+            "in": "query",
+            "description": "Set to true to only return apps that are owned by the tenant.",
+            "schema": {
+              "type": "boolean",
+              "nullable": true
+            }
+          },
+          {
+            "name": "promotionStatus",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "description": "Filters apps by promotion statuses.",
+            "schema": {
+              "type": "array",
+              "nullable": true,
+              "items": {
+                "$ref": "#/components/schemas/AppPromotionStatus"
+              }
+            }
+          },
+          {
+            "name": "provisioningStatus",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "description": "Optional provisioning statuses to filter apps by their provisioning state.",
+            "schema": {
+              "type": "array",
+              "nullable": true,
+              "items": {
+                "$ref": "#/components/schemas/AppProvisioningStatus"
+              }
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Full-text search query to filter apps by name.",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "returnAll",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Publicly available apps.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginationResponseDtoOfQueryAppsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["Store"],
+        "summary": "Create a new draft app",
+        "description": "Creates a new app in draft state. The user should be the owner of the app.",
+        "operationId": "CreateApp",
+        "requestBody": {
+          "x-name": "CreateAppRequest",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAppRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "The created app",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppCompositeDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error or terms and conditions not accepted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/app-listings": {
+      "get": {
+        "tags": ["App-Listings"],
+        "summary": "Query app listings based on provided criteria.",
+        "description": "Retrieve a list of app listings filtered by the specified criteria.",
+        "operationId": "QueryAppListings",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "query",
+            "required": true,
+            "description": "The ID of the app for which to retrieve listings.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "The locale for which to retrieve the app listings.",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of localized app listings.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AppListingLocalizedDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["App-Listings"],
+        "summary": "Create a new app listing",
+        "description": "Create a new app listing. The user should be the owner of the app.",
+        "operationId": "CreateAppListing",
+        "requestBody": {
+          "x-name": "CreateAppListingRequest",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAppListingRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "201": {
+            "description": "The created app listing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppListingDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "412": {
+            "description": "Publisher is not active"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/apps/lifecycle-logs": {
+      "get": {
+        "tags": ["Apps"],
+        "summary": "Query app lifecycle logs",
+        "description": "Returns paginated install/uninstall audit entries for the current tenant. Optionally filtered by appId via the `appId` query parameter.",
+        "operationId": "QueryAppLifecycleLogs",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "query",
+            "description": "Optional app ID filter. When provided, only entries for this app are returned.",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "returnAll",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated lifecycle log entries, sorted newest-first.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginationResponseDtoOfAppLifecycleLogDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/apps": {
+      "get": {
+        "tags": ["Apps"],
+        "summary": "Query app instances",
+        "description": "Queries app instances. The app must be the owner of the app instance or public app instances.",
+        "operationId": "QueryAppInstances",
+        "parameters": [
+          {
+            "name": "capability",
+            "in": "query",
+            "description": "Optional capability filter for the app instances.",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "promotionStatus",
+            "in": "query",
+            "style": "form",
+            "explode": true,
+            "description": "Filters apps by promotion statuses.",
+            "schema": {
+              "type": "array",
+              "nullable": true,
+              "items": {
+                "$ref": "#/components/schemas/AppPromotionStatus"
+              }
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Full-text search query to filter apps by name.",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "pageNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          {
+            "name": "returnAll",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "nullable": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The app instances with app listing if exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginationResponseDtoOfAppInstanceCompositeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/apps/overviews": {
+      "get": {
+        "tags": ["Apps"],
+        "summary": "Query app instance overviews",
+        "description": "Queries app overviews in app instance (installed app) collection.",
+        "operationId": "QueryAppInstanceOverviews",
+        "responses": {
+          "200": {
+            "description": "The list of app overviews.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/QueryAppInstanceOverviewsResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/store/apps/{appId}/provision": {
+      "put": {
+        "tags": ["Store"],
+        "summary": "Provision an app",
+        "description": "Provisions an app. The user should be the owner of the app.",
+        "operationId": "ProvisionApp",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the app",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The app was provisioned",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProvisionAppResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "AppIsNotDraft"
+          },
+          "401": {
+            "description": "UnauthorizedAccess"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/store/apps/{appId}/install": {
+      "post": {
+        "tags": ["Store"],
+        "summary": "Install an app",
+        "description": "Installs an app. The user should be the owner the app.",
+        "operationId": "InstallApp",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the app",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The created app instance with denormalised listing fields at the root; legacy composite fields (appInstance, listing) included beside them during BC.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppInstanceCompositeDto"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Timeout getting response from Wawi"
+          },
+          "500": {
+            "description": "App icon not available for app {app.Id}"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/apps/ids": {
+      "get": {
+        "tags": ["Apps"],
+        "summary": "Query app installed apps ID",
+        "description": "Queries installed app instance IDs.",
+        "operationId": "GetInstalledAppsIds",
+        "responses": {
+          "200": {
+            "description": "The installed app instance IDs.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/store/apps/{id}": {
+      "get": {
+        "tags": ["Store"],
+        "summary": "Get an app by id",
+        "description": "Gets an app by id. The user should be the owner the app.",
+        "operationId": "GetApp",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the app",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The app with denormalised listing fields at the root; legacy composite fields (app, listing) included beside them during BC.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppCompositeDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["Store"],
+        "summary": "Delete an app",
+        "description": "Delete an app. There must be no active app instance.",
+        "operationId": "DeleteApp",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the app",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The app was deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmptyResponse"
+                },
+                "example": {}
+              }
+            }
+          },
+          "404": {
+            "description": "The app is not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmptyResponse"
+                },
+                "example": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/apps/clients/{clientId}": {
+      "get": {
+        "tags": ["Apps"],
+        "summary": "Get app information by client id",
+        "description": "Retrieves app listing, app instance, publisher, provider website, and assigned scopes by OAuth client id.",
+        "operationId": "GetAppInfoByClientId",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "path",
+            "required": true,
+            "description": "The OAuth client id of the app.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The app information for the requested client id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAppInfoByClientIdResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing tenant id in request context."
+          },
+          "404": {
+            "description": "The requested app information (listing, instance, publisher) by client id was not found."
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/store/apps/{appId}/activation-codes": {
+      "get": {
+        "tags": ["Store"],
+        "summary": "Get app's activation codes",
+        "description": "Gets all activation codes for a tenant's app.",
+        "operationId": "GetActivationCodes",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the requested app",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The app activation codes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AppActivationCodeDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UnauthorizedAccess"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": ["Store"],
+        "summary": "Generate an activation code for an app",
+        "description": "Generates an activation code for the specified app. The user should be the owner of the app.",
+        "operationId": "GenerateActivationCode",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "required": true,
+            "description": "The unique identifier of the app for which the activation code is to be generated.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "body",
+          "description": "The request body containing activation code generation details.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateActivationCodeRequest_GenerateActivationCodeRequestBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "The generated activation code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/app-listings/{slug}/media/screenshots/{imageId}": {
+      "delete": {
+        "tags": ["App-Listings"],
+        "summary": "Delete a screenshot from a listing",
+        "description": "Removes the screenshot identified by {imageId} from the listing's screenshot collection\nand hard-deletes the underlying blob from storage. The {imageId} parameter is the\n32-char hex GUID embedded in the screenshot's blob name (the `{guid}` segment of\n`{slug}-screenshot-{guid}.{ext}`). Allowed only when the listing version status is\nDraft or Submitted.",
+        "operationId": "DeleteMediaScreenshot",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "Gets or sets the app listing slug (route parameter).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "imageId",
+            "in": "path",
+            "required": true,
+            "description": "Gets or sets the 32-char hex GUID identifying the screenshot (route parameter).",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Screenshot removed from the listing (returned even if the underlying blob was already absent)"
+          },
+          "403": {
+            "description": "Cross-tenant or insufficient permission"
+          },
+          "404": {
+            "description": "Listing not found, or no screenshot on the listing matches imageId"
+          },
+          "409": {
+            "description": "Listing version status does not allow mutation"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/store/apps/{slug}/images/{imageId}": {
+      "delete": {
+        "tags": ["Store"],
+        "summary": "Delete an app image",
+        "description": "Deletes an app icon image (icon-light or icon-dark) from Azure Blob Storage and removes the metadata from Cosmos DB.",
+        "operationId": "DeleteAppImage",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "The slug of the app listing",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "imageId",
+            "in": "path",
+            "required": true,
+            "description": "The image type identifier (icon-light or icon-dark)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The image was deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmptyResponse"
+                },
+                "example": {}
+              }
+            }
+          },
+          "403": {
+            "description": "Unauthorized - user does not have access to this app"
+          },
+          "404": {
+            "description": "Image not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/store/apps/{appId}/activation-codes/{activationCode}": {
+      "delete": {
+        "tags": ["Store"],
+        "summary": "Delete an activation code for an app",
+        "description": "Deletes the specified activation code for the app. The user should be the owner of the app.",
+        "operationId": "DeleteActivationCode",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "required": true,
+            "description": "The unique identifier of the app.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "activationCode",
+            "in": "path",
+            "required": true,
+            "description": "The activation code to be deleted.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The activation code was deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmptyResponse"
+                },
+                "example": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/store/apps/{appId}/activation-codes/{activationCode}/deactivate": {
+      "post": {
+        "tags": ["Store"],
+        "summary": "Deactivate an activation code for an app",
+        "description": "Deactivates the specified activation code for the app. The user should be the owner of the app.",
+        "operationId": "DeactivateActivationCode",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "required": true,
+            "description": "Gets or sets the unique identifier of the app.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "activationCode",
+            "in": "path",
+            "required": true,
+            "description": "Gets or sets the activation code to be deleted.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The activation code was deactivated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmptyResponse"
+                },
+                "example": {}
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/apps/{appId}/subscription/checkout-session": {
+      "post": {
+        "tags": ["Apps"],
+        "summary": "Create a Stripe Checkout session for an app subscription",
+        "description": "Creates a Stripe hosted Checkout session for the given subscription plan. The app instance must be in 'PaymentRequired' state. Returns the Stripe Checkout client secret for the FE to initialise the embedded payment UI.",
+        "operationId": "CreateAppPaymentCheckoutSession",
+        "parameters": [
+          {
+            "name": "appId",
+            "in": "path",
+            "required": true,
+            "description": "The store app ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "x-name": "CreateAppPaymentCheckoutSessionRequest",
+          "description": "",
+          "content": {
+            "*/*": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAppPaymentCheckoutSessionRequest"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "Stripe Checkout client secret",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateAppPaymentCheckoutSessionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request — missing appId or planId"
+          },
+          "404": {
+            "description": "Plan not found in app listing, or app instance not found for tenant"
+          },
+          "409": {
+            "description": "App instance is not in PaymentRequired state"
+          },
+          "422": {
+            "description": "Publisher has no connected Stripe account"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": []
+          }
+        ]
+      }
+    },
+    "/healthz": {
+      "get": {
+        "tags": ["Health"],
+        "description": "Check the health of the API",
+        "operationId": "Healthz",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "EmptyResponse": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "PublisherDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntityBaseDto"
+          },
+          {
+            "type": "object",
+            "description": "Represents a publisher data transfer object.",
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Gets or sets the name of the publisher."
+              },
+              "state": {
+                "description": "Gets or sets the state of the publisher.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PublisherState"
+                  }
+                ]
+              },
+              "focusAreas": {
+                "type": "array",
+                "description": "Gets or sets the focus areas for partner publishers.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "businessAddressLine1": {
+                "type": "string",
+                "description": "Gets or sets the first line of the business address.",
+                "nullable": true
+              },
+              "businessAddressLine2": {
+                "type": "string",
+                "description": "Gets or sets the second line of the business address.",
+                "nullable": true
+              },
+              "postalCode": {
+                "type": "string",
+                "description": "Gets or sets the postal code of the business address.",
+                "nullable": true
+              },
+              "city": {
+                "type": "string",
+                "description": "Gets or sets the city of the business address.",
+                "nullable": true
+              },
+              "country": {
+                "type": "string",
+                "description": "Gets or sets the country code of the business address (ISO 3166-1 alpha-2).",
+                "nullable": true
+              },
+              "businessEmail": {
+                "type": "string",
+                "description": "Gets or sets the business email address.",
+                "nullable": true
+              },
+              "createdBy": {
+                "type": "string",
+                "description": "Gets or sets the ID of the user who created the publisher.",
+                "nullable": true
+              },
+              "updatedBy": {
+                "type": "string",
+                "description": "Gets or sets the ID of the user who last updated the publisher.",
+                "nullable": true
+              },
+              "paymentAccount": {
+                "description": "Gets or sets the Stripe payment account status. null when the publisher\nhas not yet initiated Stripe onboarding.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PublisherPaymentAccountDto"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "PublisherState": {
+        "type": "string",
+        "description": "Represents the state of a publisher account.",
+        "x-enumNames": ["Pending", "Active", "Rejected", "Suspended"],
+        "enum": ["Pending", "Active", "Rejected", "Suspended"]
+      },
+      "PublisherPaymentAccountDto": {
+        "type": "object",
+        "description": "Represents the payment account status of a publisher. Intentionally excludes the Stripe account ID.",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "description": "Gets or sets the current Stripe onboarding status.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PaymentIntegrationStatus"
+              }
+            ]
+          }
+        }
+      },
+      "PaymentIntegrationStatus": {
+        "type": "string",
+        "description": "Represents the Stripe payment integration status of a publisher.",
+        "x-enumNames": ["NotConnected", "Pending", "Connected"],
+        "enum": ["NotConnected", "Pending", "Connected"]
+      },
+      "EntityBaseDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UpdatePublisherProfileRequest": {
+        "type": "object",
+        "description": "Represents the request to update a publisher's profile.",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Gets or sets the new name for the publisher.",
+            "nullable": true
+          },
+          "focusAreas": {
+            "type": "array",
+            "description": "Gets or sets the focus areas for the publisher.",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "businessAddressLine1": {
+            "type": "string",
+            "description": "Gets or sets the first line of the business address.",
+            "nullable": true
+          },
+          "businessAddressLine2": {
+            "type": "string",
+            "description": "Gets or sets the second line of the business address.",
+            "nullable": true
+          },
+          "postalCode": {
+            "type": "string",
+            "description": "Gets or sets the postal code of the business address.",
+            "nullable": true
+          },
+          "city": {
+            "type": "string",
+            "description": "Gets or sets the city of the business address.",
+            "nullable": true
+          },
+          "country": {
+            "type": "string",
+            "description": "Gets or sets the country code of the business address (ISO 3166-1 alpha-2).",
+            "nullable": true
+          },
+          "businessEmail": {
+            "type": "string",
+            "description": "Gets or sets the business email address.",
+            "nullable": true
+          }
+        }
+      },
+      "RegisterPublisherRequest": {
+        "type": "object",
+        "description": "Represents the request to register a new publisher.",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Gets or sets the display name of the partner publisher (can be different from company name)."
+          },
+          "focusAreas": {
+            "type": "array",
+            "description": "Gets or sets the focus areas of the partner publisher.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "businessEmail": {
+            "type": "string",
+            "description": "Gets or sets the business email address."
+          },
+          "businessAddressLine1": {
+            "type": "string",
+            "description": "Gets or sets the first line of the business address."
+          },
+          "businessAddressLine2": {
+            "type": "string",
+            "description": "Gets or sets the second line of the business address.",
+            "nullable": true
+          },
+          "postalCode": {
+            "type": "string",
+            "description": "Gets or sets the postal code of the business address."
+          },
+          "city": {
+            "type": "string",
+            "description": "Gets or sets the city of the business address."
+          },
+          "country": {
+            "type": "string",
+            "description": "Gets or sets the country code of the business address (ISO 3166-1 alpha-2)."
+          },
+          "legalAgreementAccepted": {
+            "type": "boolean",
+            "description": "Gets or sets a value indicating whether the legal agreement has been accepted."
+          }
+        }
+      },
+      "QueryPublishersRequest": {
+        "type": "object",
+        "description": "Represents the request to query publishers.",
+        "additionalProperties": false
+      },
+      "CursorPaginationResponseOfQueryPublisherPaymentInvoicesResponse": {
+        "type": "object",
+        "description": "Class for cursor-based pagination response DTOs",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "The list of items for the current page.",
+            "items": {
+              "$ref": "#/components/schemas/QueryPublisherPaymentInvoicesResponse"
+            }
+          },
+          "nextToken": {
+            "type": "string",
+            "description": "The cursor for the next page of results.",
+            "nullable": true
+          }
+        }
+      },
+      "QueryPublisherPaymentInvoicesResponse": {
+        "type": "object",
+        "description": "Represents a single invoice item returned by GET /publishers/{id}/payment/invoices.",
+        "additionalProperties": false,
+        "properties": {
+          "invoiceNumber": {
+            "type": "string",
+            "description": "Gets the Stripe invoice number shown on the invoice document (e.g. INV-0001)."
+          },
+          "customerName": {
+            "type": "string",
+            "description": "Gets the display name of the Stripe customer this invoice was issued to."
+          },
+          "appTechnicalName": {
+            "type": "string",
+            "description": "Gets the technical name of the app associated with this invoice, resolved from app metadata.\nEmpty string when the invoice has no app association or the app is not found."
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Gets the UTC timestamp when the invoice was created in Stripe.",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "description": "Gets the invoice status (e.g. draft, open, paid, void, uncollectible)."
+          },
+          "hostedInvoiceUrl": {
+            "type": "string",
+            "description": "Gets the Stripe-hosted URL where the customer can view and pay the invoice."
+          }
+        }
+      },
+      "QueryPublisherPaymentInvoicesRequest": {
+        "type": "object",
+        "description": "Request for GET /publishers/{id}/payment/invoices.\nUse pageSize (1–100) to control the page size and nextToken to fetch the next page.\nAll filter fields are optional query parameters.",
+        "additionalProperties": false
+      },
+      "GetPublisherWithAccessValidationRequest": {
+        "type": "object",
+        "description": "Represents the request to get a publisher.",
+        "additionalProperties": false
+      },
+      "CreatePublisherPaymentDashboardUrlResponse": {
+        "type": "object",
+        "description": "Response payload containing the single-use payment dashboard login URL.",
+        "additionalProperties": false,
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Gets the single-use payment dashboard login URL. Do not cache — it expires after one use."
+          }
+        }
+      },
+      "CreatePublisherPaymentDashboardUrlRequest": {
+        "type": "object",
+        "description": "Request payload for POST /publishers/{id}/payment/dashboard-url.",
+        "additionalProperties": false
+      },
+      "CreatePaymentOnboardingUrlResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "CreatePaymentOnboardingUrlRequest": {
+        "type": "object",
+        "description": "Request payload for POST /publishers/{id}/stripe/onboarding-url.",
+        "additionalProperties": false
+      },
+      "CreateBillingPortalSessionResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateBillingPortalSessionRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "publisherId": {
+            "type": "string"
+          }
+        }
+      },
+      "PaginationResponseDtoOfAppListingLocalizedDto": {
+        "type": "object",
+        "description": "Class for pagination response DTOs",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "The list of items for the current page.",
+            "items": {
+              "$ref": "#/components/schemas/AppListingLocalizedDto"
+            }
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "The total number of matching items across all pages.",
+            "format": "int64"
+          }
+        }
+      },
+      "AppListingLocalizedDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntityBaseDto"
+          },
+          {
+            "type": "object",
+            "description": "Data Transfer Object representing a localized version of an app listing in the JTL App Store.",
+            "additionalProperties": false,
+            "properties": {
+              "slug": {
+                "type": "string",
+                "description": "SEO-friendly public App Store URL slug derived from the app's short name.\nAutomatically generated by JTL. Immutable after the app is published.\nExample: \"trylens\""
+              },
+              "appListingVersion": {
+                "description": "The version information for this app listing, including the app's display version and the manifest version it corresponds to.\nThis is the core of the app listing, containing all the consumer-facing metadata and marketing information.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AppListingVersionLocalizedDto"
+                  }
+                ]
+              },
+              "publisherId": {
+                "type": "string",
+                "description": "Unique identifier of the publisher."
+              },
+              "publisherName": {
+                "type": "string",
+                "description": "Name of the publisher."
+              }
+            }
+          }
+        ]
+      },
+      "AppListingVersionLocalizedDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntityBaseDto"
+          },
+          {
+            "type": "object",
+            "description": "Data Transfer Object representing a localized version of an app listing version in the JTL App Store.",
+            "additionalProperties": false,
+            "properties": {
+              "appId": {
+                "type": "string",
+                "description": "The unique identifier of the app, matching the AppId in the corresponding App Manifest. This is the partition key for the database to ensure all versions of an app are stored together and can be efficiently queried.",
+                "nullable": true
+              },
+              "version": {
+                "type": "string",
+                "description": "The app's version number as displayed in the App Store (e.g., \"1.0.0\").\nManaged by the app publisher.",
+                "nullable": true
+              },
+              "listingVersion": {
+                "type": "string",
+                "description": "The manifest version that this listing corresponds to. Auto-generated by the system.\nMust be incremented with every change to the manifest structure to ensure compatibility and proper parsing by the app runtime.",
+                "nullable": true
+              },
+              "defaultLocale": {
+                "type": "string",
+                "description": "The default locale for the app listing, used as a fallback when localized content is not available for a user's locale. Must be one of the locales defined in the Name and Description dictionaries.\nExample: \"en\"",
+                "nullable": true
+              },
+              "name": {
+                "description": "Localized short and full names of the app for the selected locale (e.g. \"en-GB\", \"de-DE\").",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/NameDto"
+                  }
+                ]
+              },
+              "description": {
+                "description": "Localized short and full descriptions of the app for the selected locale.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/DescriptionDto"
+                  }
+                ]
+              },
+              "benefits": {
+                "type": "array",
+                "description": "Localized list of key benefit points for the selected locale. Maximum 5 items per locale.\nOptional.",
+                "nullable": true,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "category": {
+                "description": "Main and sub-categories classifying the app in the App Store.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/CategoryDto"
+                  }
+                ]
+              },
+              "media": {
+                "description": "Media assets for the app: icons, screenshots, and optional product video.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/MediaDto"
+                  }
+                ]
+              },
+              "compatibility": {
+                "description": "Compatibility information including supported JTL products and minimum versions.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/CompatibilityLocalizedDto"
+                  }
+                ]
+              },
+              "pricing": {
+                "description": "Pricing information for the app.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PricingLocalizedDto"
+                  }
+                ]
+              },
+              "support": {
+                "description": "Localized support and documentation URLs.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/SupportLocalizedDto"
+                  }
+                ]
+              },
+              "legal": {
+                "description": "Legal URLs including privacy policy, terms of use, and GDPR endpoints.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/LegalDto"
+                  }
+                ]
+              },
+              "editorial": {
+                "description": "Platform-controlled editorial metadata: App Store visibility and publication date.\nNot settable by the app publisher.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/EditorialDto"
+                  }
+                ]
+              },
+              "distributionType": {
+                "description": "The current distribution type of app listing.\nDefaults to Private.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/DistributionType"
+                  }
+                ]
+              },
+              "listingVersionStatus": {
+                "description": "The current listing version status of listing.\nDefaults to Draft",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AppListingVersionStatus"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "NameDto": {
+        "type": "object",
+        "description": "Data transfer object for AppListingName value object.",
+        "additionalProperties": false,
+        "properties": {
+          "short": {
+            "type": "string",
+            "description": "Short name of the app, suitable for display in constrained spaces such as list views.\nMandatory.",
+            "nullable": true
+          },
+          "full": {
+            "type": "string",
+            "description": "Full name of the app, displayed on the App Store detail page.\nMandatory.",
+            "nullable": true
+          }
+        }
+      },
+      "DescriptionDto": {
+        "type": "object",
+        "description": "Data transfer object for AppListingDescription value object.",
+        "additionalProperties": false,
+        "properties": {
+          "short": {
+            "type": "string",
+            "description": "Short teaser description shown in list and search views.\nMandatory.",
+            "nullable": true
+          },
+          "full": {
+            "type": "string",
+            "description": "Full description shown on the App Store detail page.\nMandatory.",
+            "nullable": true
+          }
+        }
+      },
+      "CategoryDto": {
+        "type": "object",
+        "description": "Data transfer object for AppListingCategory value object.",
+        "additionalProperties": false,
+        "properties": {
+          "main": {
+            "type": "string",
+            "description": "The main category of the app. Exactly one value.\nMandatory.",
+            "nullable": true
+          },
+          "sub": {
+            "type": "array",
+            "description": "One or more subcategories for the app. Minimum one value required.\nMandatory.",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "MediaDto": {
+        "type": "object",
+        "description": "Data transfer object for AppListingMedia value object.",
+        "additionalProperties": false,
+        "properties": {
+          "icons": {
+            "description": "Light and dark mode app icons.\nMandatory.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/MediaIconsDto"
+              }
+            ]
+          },
+          "screenshots": {
+            "type": "array",
+            "description": "Storage references to product screenshots (JPG or PNG).\nMinimum 1, maximum 10. Not localized.\nMandatory.",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "video": {
+            "type": "string",
+            "description": "Optional YouTube URL for a product video.\nNot localized.",
+            "nullable": true
+          }
+        }
+      },
+      "MediaIconsDto": {
+        "type": "object",
+        "description": "Data transfer object for AppListingMediaIcons value object.",
+        "additionalProperties": false,
+        "properties": {
+          "light": {
+            "type": "string",
+            "description": "Storage reference for the app icon used in light mode.",
+            "nullable": true
+          },
+          "lightImageTimestamp": {
+            "type": "string",
+            "description": "Timestamp of the last update to the light mode icon, used for cache invalidation.",
+            "nullable": true
+          },
+          "dark": {
+            "type": "string",
+            "description": "Storage reference for the app icon used in dark mode.",
+            "nullable": true
+          },
+          "darkImageTimestamp": {
+            "type": "string",
+            "description": "Timestamp of the last update to the dark mode icon, used for cache invalidation.",
+            "nullable": true
+          }
+        }
+      },
+      "CompatibilityLocalizedDto": {
+        "type": "object",
+        "description": "Data Transfer Object representing the localized compatibility information of an app listing in the JTL App Store.",
+        "additionalProperties": false,
+        "properties": {
+          "products": {
+            "type": "array",
+            "description": "Localized list of supported JTL products for the selected locale.\nMandatory.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "productsNotes": {
+            "type": "string",
+            "description": "Optional free-text note about supported third-party products.\nNot localized.",
+            "nullable": true
+          },
+          "minVersions": {
+            "type": "object",
+            "description": "Minimum required version per JTL product, as a product-name to version-string mapping.\nExample: { \"JTL-Wawi\": \"1.9.0\" }\nNot localized. Mandatory.",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "PricingLocalizedDto": {
+        "type": "object",
+        "description": "Represents the localized pricing information for an app in the App Store listing.",
+        "additionalProperties": false,
+        "properties": {
+          "subscriptionTiers": {
+            "type": "array",
+            "description": "List of localized subscription tiers available for the app.\nMaximum of 4 tiers per listing.\nAt most one tier can have IsFree = true.\nAt most one tier can have IsMostPopular = true.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionTierLocalizedDto"
+            }
+          }
+        }
+      },
+      "SubscriptionTierLocalizedDto": {
+        "type": "object",
+        "description": "Represents a localized subscription tier for an app listing.",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the subscription tier.\nMandatory.",
+            "nullable": true
+          },
+          "content": {
+            "description": "The content details of the subscription tier for the selected locale.\nMandatory.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SubscriptionTierContentDto"
+              }
+            ]
+          },
+          "isFree": {
+            "type": "boolean",
+            "description": "Indicates whether this subscription tier is free of charge.\nAt most one tier per listing can have IsFree = true.\nMandatory."
+          },
+          "monthlyPriceEur": {
+            "type": "number",
+            "description": "The monthly price of the subscription tier in euros.\nRequired when IsFree is false.\nOptional.",
+            "format": "decimal",
+            "nullable": true
+          },
+          "annualPriceEur": {
+            "type": "number",
+            "description": "The annual price of the subscription tier in euros.\nOptional, but if any paid tier has an annual price, all paid tiers must have one.",
+            "format": "decimal",
+            "nullable": true
+          },
+          "isMostPopular": {
+            "type": "boolean",
+            "description": "Indicates whether this tier is the most popular option.\nAt most one tier per listing can have IsMostPopular = true.\nTypically applies to paid tiers only.\nMandatory."
+          },
+          "trial": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SubscriptionTierTrialDto"
+              }
+            ]
+          },
+          "hasSubscribers": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SubscriptionTierContentDto": {
+        "type": "object",
+        "description": "DTO representing the localized content for a subscription tier.",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the subscription tier in the specific locale.\nMandatory.",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the subscription tier in the specific locale.\nMandatory.",
+            "nullable": true
+          },
+          "features": {
+            "type": "array",
+            "description": "List of features for the subscription tier in the specific locale.\nMaximum of 10 strings per locale.\nMandatory.",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "SubscriptionTierTrialDto": {
+        "type": "object",
+        "description": "DTO representing trial details for a subscription tier.",
+        "additionalProperties": false,
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "Indicates whether the trial is enabled for this tier.\nMandatory."
+          },
+          "preset": {
+            "type": "string",
+            "description": "The preset for the trial duration.\nMandatory.",
+            "nullable": true
+          },
+          "days": {
+            "type": "integer",
+            "description": "The number of trial days.\nMandatory.",
+            "format": "int32"
+          }
+        }
+      },
+      "SupportLocalizedDto": {
+        "type": "object",
+        "description": "Data Transfer Object representing the localized support information of an app listing in the JTL App Store.",
+        "additionalProperties": false,
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Localized customer support URLs for the selected locale.\nMandatory."
+          },
+          "documentation": {
+            "type": "string",
+            "description": "Localized documentation or user guide URLs for the selected locale.\nOptional.",
+            "nullable": true
+          }
+        }
+      },
+      "LegalDto": {
+        "type": "object",
+        "description": "Data transfer object for AppListingLegal value object.",
+        "additionalProperties": false,
+        "properties": {
+          "privacyPolicy": {
+            "type": "string",
+            "description": "URL to the app's privacy policy (legal.privacyPolicy).\nMandatory.",
+            "nullable": true
+          },
+          "termsOfUse": {
+            "type": "string",
+            "description": "URL to the app's terms of use (legal.termsOfUse).\nMandatory.",
+            "nullable": true
+          },
+          "gdpr": {
+            "description": "GDPR compliance endpoint URLs (legal.gdpr).\nMandatory.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/GdprDto"
+              }
+            ]
+          }
+        }
+      },
+      "GdprDto": {
+        "type": "object",
+        "description": "Data transfer object for AppListingGdpr value object.",
+        "additionalProperties": false,
+        "properties": {
+          "request": {
+            "type": "string",
+            "description": "URL for handling GDPR data access requests (legal.gdpr.request).\nMandatory.",
+            "nullable": true
+          },
+          "delete": {
+            "type": "string",
+            "description": "URL for handling GDPR data deletion requests (legal.gdpr.delete).\nMandatory.",
+            "nullable": true
+          }
+        }
+      },
+      "EditorialDto": {
+        "type": "object",
+        "description": "Data transfer object for AppListingEditorial value object.",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "Indicates whether the app is visible in the App Store (editorial.status).\nControlled by the platform. Mandatory."
+          },
+          "publishedAt": {
+            "type": "string",
+            "description": "The UTC timestamp when the app was first published to the App Store (editorial.publishedAt).\nNull until the app is published. Set to ISO-8601 UTC on first publication.\nMachine-generated. Optional.",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "DistributionType": {
+        "type": "string",
+        "description": "The visibility of an app.",
+        "x-enumNames": ["Private", "Public"],
+        "enum": ["Private", "Public"]
+      },
+      "AppListingVersionStatus": {
+        "type": "string",
+        "description": "Represents the state of an app listing.",
+        "x-enumNames": [
+          "Draft",
+          "Submitted",
+          "InReview",
+          "Approved",
+          "Rejected"
+        ],
+        "enum": ["Draft", "Submitted", "InReview", "Approved", "Rejected"]
+      },
+      "QueryTenantAppListingsRequest": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PaginationBase"
+          },
+          {
+            "type": "object",
+            "description": "HTTP query-string parameters for QueryTenantAppListingsEndpoint.",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "PaginationBase": {
+        "type": "object",
+        "description": "Provides a base implementation of pagination functionality, including validation of page size and number.\nImplements IPagination and adds support for skipping and taking items as well as returning all results.",
+        "x-abstract": true,
+        "additionalProperties": false
+      },
+      "UploadMediaScreenshotResponse": {
+        "type": "object",
+        "description": "Response model for a successful screenshot upload.",
+        "additionalProperties": false,
+        "properties": {
+          "imageUrl": {
+            "type": "string",
+            "description": "Gets or sets the public URL of the uploaded screenshot."
+          }
+        }
+      },
+      "UploadMediaScreenshotRequest": {
+        "type": "object",
+        "description": "Request model for the screenshot upload endpoint.",
+        "additionalProperties": false,
+        "properties": {
+          "file": {
+            "type": "string",
+            "description": "Gets or sets the uploaded file.",
+            "format": "binary"
+          }
+        }
+      },
+      "UploadMediaIconResponse": {
+        "type": "object",
+        "description": "Response model for a successful icon upload.",
+        "additionalProperties": false,
+        "properties": {
+          "imageUrl": {
+            "type": "string",
+            "description": "Gets or sets the public URL of the uploaded icon."
+          }
+        }
+      },
+      "UploadMediaIconRequest": {
+        "type": "object",
+        "description": "Request model for the icon upload endpoint.",
+        "additionalProperties": false,
+        "properties": {
+          "imageType": {
+            "description": "Gets or sets the icon type (icon-light or icon-dark).",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ImageType"
+              }
+            ]
+          },
+          "file": {
+            "type": "string",
+            "description": "Gets or sets the uploaded file.",
+            "format": "binary"
+          }
+        }
+      },
+      "ImageType": {
+        "type": "string",
+        "description": "Represents the type of image for an app.",
+        "x-enumNames": ["IconLight", "IconDark"],
+        "enum": ["IconLight", "IconDark"]
+      },
+      "UploadAppImageResponse": {
+        "type": "object",
+        "description": "Response model for uploading an app image.",
+        "additionalProperties": false,
+        "properties": {
+          "metadata": {
+            "description": "Gets or sets the image metadata including upload timestamp.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ImageMetadata"
+              }
+            ]
+          },
+          "imageUrl": {
+            "type": "string",
+            "description": "Gets or sets the accessible URL for the uploaded image."
+          }
+        }
+      },
+      "ImageMetadata": {
+        "type": "object",
+        "description": "Represents metadata about an image.",
+        "additionalProperties": false,
+        "properties": {
+          "contentType": {
+            "type": "string",
+            "description": "The content type of the image."
+          },
+          "sizeBytes": {
+            "type": "integer",
+            "description": "The size of the image in bytes.",
+            "format": "int64"
+          },
+          "width": {
+            "type": "integer",
+            "description": "Width in pixels (PNG only).",
+            "format": "int32",
+            "nullable": true
+          },
+          "height": {
+            "type": "integer",
+            "description": "Height in pixels (PNG only).",
+            "format": "int32",
+            "nullable": true
+          },
+          "dpiX": {
+            "type": "number",
+            "description": "Horizontal dots-per-inch (PNG only).",
+            "format": "double",
+            "nullable": true
+          },
+          "dpiY": {
+            "type": "number",
+            "description": "Vertical dots-per-inch (PNG only).",
+            "format": "double",
+            "nullable": true
+          },
+          "hashSha256": {
+            "type": "string",
+            "description": "The SHA-256 hash of the image content."
+          },
+          "uploadTimestamp": {
+            "type": "string",
+            "description": "The timestamp when the image was uploaded.",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "UploadAppImageRequest": {
+        "type": "object",
+        "description": "Request model for uploading an app image.",
+        "additionalProperties": false,
+        "properties": {
+          "imageType": {
+            "description": "Gets or sets the image type (icon-light or icon-dark).",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ImageType"
+              }
+            ]
+          },
+          "file": {
+            "type": "string",
+            "description": "Gets or sets the uploaded file.",
+            "format": "binary"
+          },
+          "overwrite": {
+            "type": "boolean",
+            "description": "Gets or sets whether to overwrite existing images. If true, allows overwriting without error. If false, throws error on duplicate."
+          }
+        }
+      },
+      "AppListingDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntityBaseDto"
+          },
+          {
+            "type": "object",
+            "description": "Data Transfer Object representing an app listing in the JTL App Store",
+            "additionalProperties": false,
+            "properties": {
+              "slug": {
+                "type": "string",
+                "description": "SEO-friendly public App Store URL slug derived from the app's short name.\nAutomatically generated by JTL. Immutable after the app is published.\nExample: \"trylens\""
+              },
+              "appListingVersion": {
+                "description": "The version information for this app listing, including the app's display version and the manifest version it corresponds to.\nThis is the core of the app listing, containing all the consumer-facing metadata and marketing information.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AppListingVersionDto"
+                  }
+                ]
+              },
+              "publisherId": {
+                "type": "string",
+                "description": "Unique identifier of the publisher."
+              },
+              "publisherName": {
+                "type": "string",
+                "description": "Name of the publisher."
+              }
+            }
+          }
+        ]
+      },
+      "AppListingVersionDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntityBaseDto"
+          },
+          {
+            "type": "object",
+            "description": "Data Transfer Object representing an app listing version in the JTL App Store",
+            "additionalProperties": false,
+            "properties": {
+              "appId": {
+                "type": "string",
+                "description": "The unique identifier of the app, matching the AppId in the corresponding App Manifest. This is the partition key for the database to ensure all versions of an app are stored together and can be efficiently queried.",
+                "nullable": true
+              },
+              "version": {
+                "type": "string",
+                "description": "The app's version number as displayed in the App Store (e.g., \"1.0.0\").\nManaged by the app publisher.",
+                "nullable": true
+              },
+              "listingVersion": {
+                "type": "string",
+                "description": "The manifest version that this listing corresponds to. Auto-generated by the system.\nMust be incremented with every change to the manifest structure to ensure compatibility and proper parsing by the app runtime.",
+                "nullable": true
+              },
+              "defaultLocale": {
+                "type": "string",
+                "description": "The default locale for the app listing, used as a fallback when localized content is not available for a user's locale. Must be one of the locales defined in the Name and Description dictionaries.\nExample: \"en\"",
+                "nullable": true
+              },
+              "name": {
+                "type": "object",
+                "description": "Localized short and full names of the app, keyed by locale (e.g. \"en-GB\", \"de-DE\").",
+                "nullable": true,
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/NameDto"
+                }
+              },
+              "description": {
+                "type": "object",
+                "description": "Localized short and full descriptions of the app, keyed by locale.",
+                "nullable": true,
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/DescriptionDto"
+                }
+              },
+              "benefits": {
+                "type": "object",
+                "description": "Localized list of key benefit points, keyed by locale. Maximum 5 items per locale.\nOptional.",
+                "nullable": true,
+                "additionalProperties": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "category": {
+                "description": "Main and sub-categories classifying the app in the App Store.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/CategoryDto"
+                  }
+                ]
+              },
+              "media": {
+                "description": "Media assets for the app: icons, screenshots, and optional product video.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/MediaDto"
+                  }
+                ]
+              },
+              "compatibility": {
+                "description": "Compatibility information including supported JTL products and minimum versions.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/CompatibilityDto"
+                  }
+                ]
+              },
+              "pricing": {
+                "description": "Pricing information for the app.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PricingDto"
+                  }
+                ]
+              },
+              "support": {
+                "description": "Localized support and documentation URLs.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/SupportDto"
+                  }
+                ]
+              },
+              "legal": {
+                "description": "Legal URLs including privacy policy, terms of use, and GDPR endpoints.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/LegalDto"
+                  }
+                ]
+              },
+              "editorial": {
+                "description": "Platform-controlled editorial metadata: App Store visibility and publication date.\nNot settable by the app publisher.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/EditorialDto"
+                  }
+                ]
+              },
+              "distributionType": {
+                "description": "The current distribution type of app listing.\nDefaults to Private.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/DistributionType"
+                  }
+                ]
+              },
+              "listingVersionStatus": {
+                "description": "The current listing version status of listing.\nDefaults to Draft",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AppListingVersionStatus"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "CompatibilityDto": {
+        "type": "object",
+        "description": "Data transfer object for AppListingCompatibility value object.",
+        "additionalProperties": false,
+        "properties": {
+          "products": {
+            "type": "object",
+            "description": "Localized list of supported JTL products, keyed by locale.\nMandatory.",
+            "nullable": true,
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "productsNotes": {
+            "type": "string",
+            "description": "Optional free-text note about supported third-party products.\nNot localized.",
+            "nullable": true
+          },
+          "minVersions": {
+            "type": "object",
+            "description": "Minimum required version per JTL product, as a product-name to version-string mapping.\nExample: { \"JTL-Wawi\": \"1.9.0\" }\nNot localized. Mandatory.",
+            "nullable": true,
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "PricingDto": {
+        "type": "object",
+        "description": "Data transfer object for AppListingPricing value object.",
+        "additionalProperties": false,
+        "properties": {
+          "subscriptionTiers": {
+            "type": "array",
+            "description": "List of subscription tiers available for the app.\nMaximum of 4 tiers per listing.\nAt most one tier can have IsFree = true.\nAt most one tier can have IsMostPopular = true.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/SubscriptionTierDto"
+            }
+          }
+        }
+      },
+      "SubscriptionTierDto": {
+        "type": "object",
+        "description": "DTO representing a subscription tier for an app listing, including its pricing and trial details.",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the subscription tier.\nMandatory.",
+            "nullable": true
+          },
+          "content": {
+            "type": "object",
+            "description": "A dictionary containing the content details of the subscription tier for different locales.\nMandatory.",
+            "nullable": true,
+            "additionalProperties": {
+              "$ref": "#/components/schemas/SubscriptionTierContentDto"
+            }
+          },
+          "isFree": {
+            "type": "boolean",
+            "description": "Indicates whether this subscription tier is free of charge.\nAt most one tier per listing can have IsFree = true.\nMandatory."
+          },
+          "monthlyPriceEur": {
+            "type": "number",
+            "description": "The monthly price of the subscription tier in euros.\nRequired when IsFree is false.\nOptional.",
+            "format": "decimal",
+            "nullable": true
+          },
+          "annualPriceEur": {
+            "type": "number",
+            "description": "The annual price of the subscription tier in euros.\nOptional, but if any paid tier has an annual price, all paid tiers must have one.",
+            "format": "decimal",
+            "nullable": true
+          },
+          "isMostPopular": {
+            "type": "boolean",
+            "description": "Indicates whether this tier is the most popular option.\nAt most one tier per listing can have IsMostPopular = true.\nTypically applies to paid tiers only.\nMandatory."
+          },
+          "trial": {
+            "description": "Trial details for the subscription tier.\nOptional.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SubscriptionTierTrialDto"
+              }
+            ]
+          },
+          "hasSubscribers": {
+            "type": "boolean",
+            "description": "Indicates whether this tier has active subscribers.\nFrom billing; tier is fully read-only when true.\nIgnore client attempts to edit or delete locked tiers.\nMandatory."
+          }
+        }
+      },
+      "SupportDto": {
+        "type": "object",
+        "description": "Data transfer object for AppListingSupport value object.",
+        "additionalProperties": false,
+        "properties": {
+          "url": {
+            "type": "object",
+            "description": "Localized customer support URLs, keyed by locale.\nMandatory.",
+            "nullable": true,
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "documentation": {
+            "type": "object",
+            "description": "Localized documentation or user guide URLs, keyed by locale.\nOptional.",
+            "nullable": true,
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "AppInstanceCompositeDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AppInstanceDto"
+          },
+          {
+            "type": "object",
+            "description": "Response envelope for endpoints that return an AppInstance. Same shape contract as\nAppInstanceDto: bare DTO at root + two legacy composite fields beside it.",
+            "additionalProperties": false,
+            "properties": {
+              "appInstance": {
+                "description": "BC-only legacy field: nested copy of the bare AppInstanceDto fields.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AppInstanceDto"
+                  }
+                ]
+              },
+              "appInstanceId": {
+                "type": "string",
+                "description": "The unique identifier of the app, matching the AppId in the corresponding App."
+              },
+              "listing": {
+                "description": "BC-only legacy field: the localized listing block.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AppListingLocalizedDto"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "AppListingInputDto": {
+        "type": "object",
+        "description": "Shared input body for creating and updating app listing versions.",
+        "additionalProperties": false,
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "The app's version number as displayed in the App Store (e.g., \"1.0.0\").\nManaged by the app publisher.",
+            "nullable": true
+          },
+          "defaultLocale": {
+            "type": "string",
+            "description": "The default locale for the app listing, used as a fallback when localized content is not available for a user's locale.\nMust be one of the locales defined in the Name and Description dictionaries.\nExample: \"en\"",
+            "nullable": true
+          },
+          "name": {
+            "type": "object",
+            "description": "Localized short and full names of the app, keyed by locale (e.g. \"en-GB\", \"de-DE\").",
+            "nullable": true,
+            "additionalProperties": {
+              "$ref": "#/components/schemas/NameDto"
+            }
+          },
+          "description": {
+            "type": "object",
+            "description": "Localized short and full descriptions of the app, keyed by locale.",
+            "nullable": true,
+            "additionalProperties": {
+              "$ref": "#/components/schemas/DescriptionDto"
+            }
+          },
+          "benefits": {
+            "type": "object",
+            "description": "Localized list of key benefit points, keyed by locale. Maximum 5 items per locale.\nOptional.",
+            "nullable": true,
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "category": {
+            "description": "Main and sub-categories classifying the app in the App Store.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CategoryDto"
+              }
+            ]
+          },
+          "media": {
+            "description": "Media assets for the app: icons, screenshots, and optional product video.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/MediaDto"
+              }
+            ]
+          },
+          "compatibility": {
+            "description": "Compatibility information including supported JTL products and minimum versions.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/CompatibilityDto"
+              }
+            ]
+          },
+          "pricing": {
+            "description": "Pricing information for the app.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PricingDto"
+              }
+            ]
+          },
+          "support": {
+            "description": "Localized support and documentation URLs.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SupportDto"
+              }
+            ]
+          },
+          "legal": {
+            "description": "Legal URLs including privacy policy, terms of use, and GDPR endpoints.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/LegalDto"
+              }
+            ]
+          },
+          "editorial": {
+            "description": "Platform-controlled editorial metadata: App Store visibility and publication date.\nNot settable by the app publisher.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/EditorialDto"
+              }
+            ]
+          },
+          "distributionType": {
+            "description": "The current distribution type of app listing.\nDefaults to Private.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/DistributionType"
+              }
+            ]
+          }
+        }
+      },
+      "AppInstanceDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntityBaseDto2"
+          },
+          {
+            "type": "object",
+            "description": "Data Transfer Object representing an instance of an app.\nInherits from AppDto.",
+            "additionalProperties": false,
+            "properties": {
+              "installationStatus": {
+                "description": "Gets or sets the current installation status of the app instance.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/InstallationStatus"
+                  }
+                ]
+              },
+              "configurationStatus": {
+                "description": "Gets or sets the current configuration status of the app instance",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/ConfigurationStatus"
+                  }
+                ]
+              },
+              "scopes": {
+                "type": "array",
+                "description": "The list of scopes which were granted to the app.\nEach scope is a string in the format of \"api.scopes.{scope}\" (e.g. \"api.scopes.product:read\").",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "features": {
+                "type": "array",
+                "description": "The list of features which were granted to the app.\nEach feature is a string in the format of \"{product-slug}.{capability}.{feature}\" (e.g. \"wawi.tabs.details:full\").",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "metadata": {
+                "type": "object",
+                "description": "The metadata associated with the app instance.\nThis is a place to store custom key-value pairs as an app developer.",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "slug": {
+                "type": "string",
+                "description": "The slug of the app listing. Null if app listing is not yet created.",
+                "nullable": true
+              },
+              "publisherId": {
+                "type": "string",
+                "description": "Unique identifier of the publisher."
+              },
+              "publisherName": {
+                "type": "string",
+                "description": "Name of the publisher."
+              },
+              "activeVersion": {
+                "description": "The currently active version of the app.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AppVersionDto"
+                  }
+                ]
+              },
+              "redeemedAt": {
+                "type": "string",
+                "description": "The date and time when the app instance was redeemed. This is set when the activation code is redeemed and the app instance is created.\nNull if app is not retrieved by redemption.",
+                "format": "date-time",
+                "nullable": true
+              },
+              "subscription": {
+                "description": "The active subscription for this app instance. Null when no subscription is active.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/SubscriptionDto"
+                  }
+                ]
+              },
+              "listingVersionStatus": {
+                "description": "Mirror of AppListing.AppListingVersion.Status. Null when no listing exists.\nMaintained by SyncAppListingCommand.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AppListingVersionStatus"
+                  }
+                ]
+              },
+              "mediaIcons": {
+                "description": "Mirror of AppListing.AppListingVersion.Media.Icons. Null when no listing exists.\nMaintained by SyncAppListingCommand.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/MediaIconsDto"
+                  }
+                ]
+              },
+              "legal": {
+                "description": "Mirror of AppListing.AppListingVersion.Legal. Null when no listing exists.\nMaintained by SyncAppListingCommand.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/LegalDto"
+                  }
+                ]
+              },
+              "pricing": {
+                "description": "Mirror of AppListing.AppListingVersion.Pricing. Null when no listing exists.\nMaintained by SyncAppListingCommand.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PricingDto"
+                  }
+                ]
+              },
+              "isPubliclyVisible": {
+                "type": "boolean",
+                "description": "Derived flag: true iff the current listing version is Approved AND Public AND Editorial.Status is true.\nUsed by store/tenant visibility queries.\nMaintained by SyncAppListingCommand."
+              },
+              "defaultLocale": {
+                "type": "string",
+                "description": "Mirror of AppListing.AppListingVersion.DefaultLocale. Null when no listing exists.\nMaintained by SyncAppListingCommand.",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "InstallationStatus": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": ["Uninstalled", "Installed", "Failed"],
+        "enum": ["Uninstalled", "Installed", "Failed"]
+      },
+      "ConfigurationStatus": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "RequiresReconfiguration",
+          "Unconfigured",
+          "Configured",
+          "Failed",
+          "PaymentRequired"
+        ],
+        "enum": [
+          "RequiresReconfiguration",
+          "Unconfigured",
+          "Configured",
+          "Failed",
+          "PaymentRequired"
+        ]
+      },
+      "AppVersionDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntityBaseDto"
+          },
+          {
+            "type": "object",
+            "description": "Data Transfer Object representing an application version.",
+            "additionalProperties": false,
+            "properties": {
+              "manifest": {
+                "description": "Gets or sets the manifest information for the app version.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AppManifestDto"
+                  }
+                ]
+              },
+              "promotionStatus": {
+                "description": "Gets or sets the promotion status of the app version.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AppPromotionStatus"
+                  }
+                ]
+              },
+              "provisioningStatus": {
+                "description": "Indicate the provisioning status of an app, controlled by app publisher to determine the app is ready for listing.\nDefault to Draft",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AppProvisioningStatus"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "AppManifestDto": {
+        "type": "object",
+        "description": "Represents the data transfer object for an app manifest.",
+        "additionalProperties": false,
+        "properties": {
+          "manifestVersion": {
+            "type": "string",
+            "description": "Gets or sets the manifest version.",
+            "nullable": true
+          },
+          "version": {
+            "type": "string",
+            "description": "Gets or sets the app version.",
+            "nullable": true
+          },
+          "appId": {
+            "type": "string",
+            "description": "Gets or sets the identifier of the app.",
+            "nullable": true
+          },
+          "technicalName": {
+            "type": "string",
+            "description": "Gets or sets the technical name of the app.",
+            "nullable": true
+          },
+          "requirements": {
+            "description": "Gets or sets the requirements of the app.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AppManifestRequirementsDto"
+              }
+            ]
+          },
+          "lifecycle": {
+            "description": "Gets or sets the lifecycle information.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AppManifestLifecycleDto"
+              }
+            ]
+          },
+          "capabilities": {
+            "description": "Gets or sets the capabilities of the app.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AppManifestCapabilitiesDto"
+              }
+            ]
+          }
+        }
+      },
+      "AppManifestRequirementsDto": {
+        "type": "object",
+        "description": "Represents app manifest requirements in the DTO.",
+        "additionalProperties": false,
+        "properties": {
+          "minCloudApiVersion": {
+            "type": "string",
+            "description": "Gets or sets the minimum cloud API version required by the app.",
+            "nullable": true
+          }
+        }
+      },
+      "AppManifestLifecycleDto": {
+        "type": "object",
+        "description": "Represents the lifecycle URLs in an app manifest.",
+        "additionalProperties": false,
+        "properties": {
+          "configurationUrl": {
+            "type": "string",
+            "description": "Gets or sets the configuration URL.",
+            "nullable": true
+          },
+          "connectUrl": {
+            "type": "string",
+            "description": "Gets or sets the connect URL.",
+            "nullable": true
+          },
+          "disconnectUrl": {
+            "type": "string",
+            "description": "Gets or sets the disconnect URL.",
+            "nullable": true
+          }
+        }
+      },
+      "AppManifestCapabilitiesDto": {
+        "type": "object",
+        "description": "Represents the capabilities of an app manifest.",
+        "additionalProperties": false,
+        "properties": {
+          "hub": {
+            "description": "Gets or sets the Hub capabilities.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AppManifestHubCapabilitiesDto"
+              }
+            ]
+          },
+          "erp": {
+            "description": "Gets or sets the ERP capabilities.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AppManifestErpCapabilitiesDto"
+              }
+            ]
+          }
+        }
+      },
+      "AppManifestHubCapabilitiesDto": {
+        "type": "object",
+        "description": "Represents the Hub capabilities in an app manifest.",
+        "additionalProperties": false,
+        "properties": {
+          "appLauncher": {
+            "description": "Gets or sets the app launcher capability.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AppManifestHubCapabilityAppLauncherDto"
+              }
+            ]
+          }
+        }
+      },
+      "AppManifestHubCapabilityAppLauncherDto": {
+        "type": "object",
+        "description": "Represents the app launcher capability for the Hub in an app manifest.",
+        "additionalProperties": false,
+        "properties": {
+          "redirectUrl": {
+            "type": "string",
+            "description": "Gets or sets the redirect URL.",
+            "nullable": true
+          },
+          "closedPreviewUrl": {
+            "type": "string",
+            "description": "Gets or sets the closed preview URL.",
+            "nullable": true
+          }
+        }
+      },
+      "AppManifestErpCapabilitiesDto": {
+        "type": "object",
+        "description": "Represents the ERP capabilities in an app manifest.",
+        "additionalProperties": false,
+        "properties": {
+          "menuItems": {
+            "type": "array",
+            "description": "Gets or sets the list of menu items.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/AppManifestErpCapabilityMenuItemDto"
+            }
+          },
+          "api": {
+            "description": "Gets or sets the API capabilities.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AppManifestErpCapabilitiesApiDto"
+              }
+            ]
+          },
+          "pane": {
+            "type": "array",
+            "description": "Gets or sets the pane capabilities.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/AppManifestPaneCapabilitiesDto"
+            }
+          },
+          "webhooks": {
+            "description": "Gets or sets the webhook configuration for ERP capabilities.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AppManifestErpCapabilitiesWebhooksDto"
+              }
+            ]
+          }
+        }
+      },
+      "AppManifestErpCapabilityMenuItemDto": {
+        "type": "object",
+        "description": "Represents a menu item for ERP capabilities in an app manifest.",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Gets or sets the ID of the menu item.",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "Gets or sets the name of the menu item.",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "description": "Gets or sets the URL for the menu item.",
+            "nullable": true
+          }
+        }
+      },
+      "AppManifestErpCapabilitiesApiDto": {
+        "type": "object",
+        "description": "Represents the ERP capabilities API in the app manifest.",
+        "additionalProperties": false,
+        "properties": {
+          "scopes": {
+            "type": "array",
+            "description": "Gets or sets the scopes associated with the API.",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "AppManifestPaneCapabilitiesDto": {
+        "type": "object",
+        "description": "Represents the pane capabilities in an app manifest.",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Gets or sets the stable identifier of the pane.",
+            "nullable": true
+          },
+          "context": {
+            "type": "string",
+            "description": "Gets or sets the context for the pane.",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "description": "Gets or sets the display title for the pane in the ERP shell.",
+            "nullable": true
+          },
+          "matchChildContext": {
+            "type": "boolean",
+            "description": "Gets or sets whether the pane should also apply to child contexts.",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "description": "Gets or sets the URL for the pane.",
+            "nullable": true
+          },
+          "requiredScopes": {
+            "type": "array",
+            "description": "Gets or sets the required scopes needed to load this pane.",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "AppManifestErpCapabilitiesWebhooksDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "apiVersion": {
+            "type": "string",
+            "description": "Gets or sets the webhook API version.",
+            "nullable": true
+          },
+          "subscriptions": {
+            "type": "array",
+            "description": "Gets or sets the list of webhook subscriptions.",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/AppManifestErpCapabilitiesWebhookSubscriptionDto"
+            }
+          }
+        }
+      },
+      "AppManifestErpCapabilitiesWebhookSubscriptionDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "topics": {
+            "type": "array",
+            "description": "Gets or sets the list of webhook topics.",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "endpoint": {
+            "description": "Gets or sets the endpoint for the webhook subscription.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AppManifestErpCapabilitiesWebhookEndpointDto"
+              }
+            ]
+          }
+        }
+      },
+      "AppManifestErpCapabilitiesWebhookEndpointDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "Gets or sets the URL of the endpoint.",
+            "nullable": true
+          }
+        }
+      },
+      "AppPromotionStatus": {
+        "type": "string",
+        "description": "Represents the promotion status of an app within the platform.",
+        "x-enumNames": ["None", "JtlGroup", "VerifiedPartner"],
+        "enum": ["None", "JtlGroup", "VerifiedPartner"]
+      },
+      "AppProvisioningStatus": {
+        "type": "string",
+        "description": "The provision status of an app, set by app publisher.",
+        "x-enumNames": ["Draft", "Provisioned", "Suspended"],
+        "enum": ["Draft", "Provisioned", "Suspended"]
+      },
+      "SubscriptionDto": {
+        "type": "object",
+        "description": "Data Transfer Object representing the active subscription of an app instance.",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identifier of the active subscription tier (plan ID)."
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name of the active subscription tier."
+          },
+          "priceType": {
+            "description": "Billing cycle of the subscription (monthly or annual).",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SubscriptionTierPriceType"
+              }
+            ]
+          },
+          "status": {
+            "type": "string",
+            "description": "Current Stripe subscription lifecycle status (e.g. active, past_due, canceled).",
+            "nullable": true
+          },
+          "dueDate": {
+            "type": "string",
+            "description": "End of the current billing period. Null until first billing cycle is confirmed.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "cancelAt": {
+            "type": "string",
+            "description": "If the subscription is set to cancel at the end of the current billing period, this field indicates when the cancellation will take effect. Null if not set to cancel.",
+            "format": "date-time",
+            "nullable": true
+          },
+          "payment": {
+            "description": "The payment state for this subscription. Null until a payment has been confirmed.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SubscriptionPaymentDto"
+              }
+            ]
+          }
+        }
+      },
+      "SubscriptionTierPriceType": {
+        "type": "string",
+        "description": "Represents the type of price for a subscription tier.",
+        "x-enumNames": ["Monthly", "Annual"],
+        "enum": ["Monthly", "Annual"]
+      },
+      "SubscriptionPaymentDto": {
+        "type": "object",
+        "description": "Data Transfer Object representing the Stripe payment state of a subscription.\nNull on SubscriptionDto until a payment has been confirmed via checkout.\nIntentionally excludes internal Stripe identifiers (CustomerId, SubscriptionId, Type).",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Current payment status (e.g. paid, past_due, canceled)."
+          }
+        }
+      },
+      "EntityBaseDto2": {
+        "type": "object",
+        "x-abstract": true,
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UpdateAppInstanceStatusRequest": {
+        "type": "object",
+        "description": "Represents the request to update the status of an app instance.",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "description": "Gets or sets the new status for the app instance.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ConfigurationStatus"
+              }
+            ]
+          }
+        }
+      },
+      "UpdateAppInstanceMetadataRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "set": {
+            "type": "object",
+            "description": "The metadata key-value pairs to set or update.",
+            "nullable": true,
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "remove": {
+            "type": "array",
+            "description": "The metadata keys to remove.",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "AppCompositeDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AppDto"
+          },
+          {
+            "type": "object",
+            "description": "Response envelope for endpoints that return an App. Inherits AppDto so the bare\nfields (including the five denormalised listing mirrors) live at the root. Re-declares the\ntwo legacy composite fields (App and Listing) at the same root\nfor BC.",
+            "additionalProperties": false,
+            "properties": {
+              "app": {
+                "description": "BC-only legacy field: nested copy of the bare AppDto fields.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AppDto"
+                  }
+                ]
+              },
+              "appId": {
+                "type": "string",
+                "description": "The unique identifier of the app, matching the AppId in the corresponding App."
+              },
+              "listing": {
+                "description": "BC-only legacy field: the localized listing block.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AppListingLocalizedDto"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "AppDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntityBaseDto"
+          },
+          {
+            "type": "object",
+            "description": "Data Transfer Object representing an application within the platform.\nInherits from EntityBaseDto for base entity properties.",
+            "additionalProperties": false,
+            "properties": {
+              "technicalName": {
+                "type": "string",
+                "description": "The name of the application."
+              },
+              "activeVersion": {
+                "description": "The currently active version of the application.",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AppVersionDto"
+                  }
+                ]
+              },
+              "publisherId": {
+                "type": "string",
+                "description": "The unique identifier of the application publisher."
+              },
+              "publisherName": {
+                "type": "string",
+                "description": "Name of the publisher."
+              },
+              "clientId": {
+                "type": "string",
+                "description": "The client identifier for the application."
+              },
+              "slug": {
+                "type": "string",
+                "description": "The slug of the app listing. Null if app listing is not yet created.",
+                "nullable": true
+              },
+              "tc": {
+                "description": "Terms and conditions associated with the application.\nNullable if not provided.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/TermsAndConditionsDto"
+                  }
+                ]
+              },
+              "listingVersionStatus": {
+                "description": "Mirror of AppListing.AppListingVersion.Status. Null when no listing exists.\nMaintained by SyncAppListingCommand.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AppListingVersionStatus"
+                  }
+                ]
+              },
+              "mediaIcons": {
+                "description": "Mirror of AppListing.AppListingVersion.Media.Icons. Null when no listing exists.\nMaintained by SyncAppListingCommand.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/MediaIconsDto"
+                  }
+                ]
+              },
+              "legal": {
+                "description": "Mirror of AppListing.AppListingVersion.Legal. Null when no listing exists.\nMaintained by SyncAppListingCommand.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/LegalDto"
+                  }
+                ]
+              },
+              "pricing": {
+                "description": "Mirror of AppListing.AppListingVersion.Pricing. Null when no listing exists.\nMaintained by SyncAppListingCommand.",
+                "nullable": true,
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/PricingDto"
+                  }
+                ]
+              },
+              "isPubliclyVisible": {
+                "type": "boolean",
+                "description": "Derived flag: true iff the current listing version is Approved AND Public AND Editorial.Status is true.\nUsed by store/tenant visibility queries.\nMaintained by SyncAppListingCommand."
+              },
+              "defaultLocale": {
+                "type": "string",
+                "description": "Mirror of AppListing.AppListingVersion.DefaultLocale. Null when no listing exists.\nMaintained by SyncAppListingCommand.",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "TermsAndConditionsDto": {
+        "type": "object",
+        "description": "Data Transfer Object representing accepted terms and conditions.",
+        "additionalProperties": false,
+        "properties": {
+          "acceptedAt": {
+            "type": "string",
+            "description": "The timestamp when the terms were accepted (recommended in UTC).",
+            "format": "date-time"
+          },
+          "version": {
+            "type": "string",
+            "description": "The version identifier of the terms that were accepted."
+          }
+        }
+      },
+      "UninstallAppInstanceRequest": {
+        "type": "object",
+        "description": "Represents the request to uninstall an app instance.",
+        "additionalProperties": false
+      },
+      "UpdateAppRequest_UpdateAppBody": {
+        "type": "object",
+        "description": "Represents the body of the update app request.",
+        "additionalProperties": false,
+        "properties": {
+          "manifest": {
+            "description": "Gets or sets the updated manifest data for the app.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AppManifestInputDto"
+              }
+            ]
+          },
+          "tcAccepted": {
+            "type": "boolean",
+            "description": "Indicates whether the terms and conditions have been accepted.",
+            "nullable": true
+          }
+        }
+      },
+      "AppManifestInputDto": {
+        "type": "object",
+        "description": "Input model for creating or updating an app manifest.\nAppId and ManifestVersion are intentionally absent — they are assigned server-side.\nUse AppManifestDto for response shapes.",
+        "additionalProperties": false,
+        "properties": {
+          "version": {
+            "type": "string",
+            "description": "Gets or sets the app version.",
+            "nullable": true
+          },
+          "technicalName": {
+            "type": "string",
+            "description": "Gets or sets the technical name of the app.",
+            "nullable": true
+          },
+          "requirements": {
+            "description": "Gets or sets the requirements of the app.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AppManifestRequirementsDto"
+              }
+            ]
+          },
+          "lifecycle": {
+            "description": "Gets or sets the lifecycle information.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AppManifestLifecycleDto"
+              }
+            ]
+          },
+          "capabilities": {
+            "description": "Gets or sets the capabilities of the app.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AppManifestCapabilitiesDto"
+              }
+            ]
+          }
+        }
+      },
+      "SubmitAppListingRequest": {
+        "type": "object",
+        "description": "Represents the request to submit an app listing.",
+        "additionalProperties": false
+      },
+      "RedeemActivationCodeResponse": {
+        "type": "object",
+        "description": "Response payload returned when an activation code is successfully redeemed.",
+        "additionalProperties": false,
+        "properties": {
+          "appId": {
+            "type": "string",
+            "description": "Gets the identifier of the app associated with the redeemed activation code."
+          }
+        }
+      },
+      "RedeemActivationCodeRequest": {
+        "type": "object",
+        "description": "Request model for redeeming an activation code.",
+        "additionalProperties": false
+      },
+      "PaginationResponseDtoOfQueryTenantAppsResponse": {
+        "type": "object",
+        "description": "Class for pagination response DTOs",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "The list of items for the current page.",
+            "items": {
+              "$ref": "#/components/schemas/QueryTenantAppsResponse"
+            }
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "The total number of matching items across all pages.",
+            "format": "int64"
+          }
+        }
+      },
+      "QueryTenantAppsResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AppCompositeDto"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "isInstalled": {
+                "type": "boolean"
+              }
+            }
+          }
+        ]
+      },
+      "QueryTenantAppsRequest": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PaginationBase"
+          },
+          {
+            "type": "object",
+            "description": "Represents a request to query apps in the context of a specific tenant.\nThe tenant is identified by the required X-Tenant-Id HTTP header.",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "PaginationResponseDtoOfQueryAppsResponse": {
+        "type": "object",
+        "description": "Class for pagination response DTOs",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "The list of items for the current page.",
+            "items": {
+              "$ref": "#/components/schemas/QueryAppsResponse"
+            }
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "The total number of matching items across all pages.",
+            "format": "int64"
+          }
+        }
+      },
+      "QueryAppsResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AppCompositeDto"
+          },
+          {
+            "type": "object",
+            "description": "Row shape for the paginated /store/apps list endpoint. Inherits bare AppDto (with denormalised\nlisting mirrors). Carries installation state and two BC legacy composite fields at the root.",
+            "additionalProperties": false,
+            "properties": {
+              "isInstalled": {
+                "type": "boolean",
+                "description": "Indicates whether the app is installed for the current tenant."
+              }
+            }
+          }
+        ]
+      },
+      "QueryAppsRequest": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PaginationBase"
+          },
+          {
+            "type": "object",
+            "description": "Represents a request to query apps with optional filtering parameters.",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "QueryAppListingsRequest": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "PaginationResponseDtoOfAppLifecycleLogDto": {
+        "type": "object",
+        "description": "Class for pagination response DTOs",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "The list of items for the current page.",
+            "items": {
+              "$ref": "#/components/schemas/AppLifecycleLogDto"
+            }
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "The total number of matching items across all pages.",
+            "format": "int64"
+          }
+        }
+      },
+      "AppLifecycleLogDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntityBaseDto"
+          },
+          {
+            "type": "object",
+            "description": "Data Transfer Object representing a single app lifecycle log entry (one install or uninstall event).",
+            "additionalProperties": false,
+            "properties": {
+              "appId": {
+                "type": "string",
+                "description": "The ID of the app involved in this lifecycle event."
+              },
+              "appName": {
+                "type": "string",
+                "description": "Snapshot of the app's display name at the time of the event."
+              },
+              "instanceId": {
+                "type": "string",
+                "description": "Optional reference to the AppInstance at the time of the event.",
+                "nullable": true
+              },
+              "action": {
+                "description": "The type of lifecycle event (Install or Uninstall).",
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/AppLifecycleAction"
+                  }
+                ]
+              },
+              "createdBy": {
+                "type": "string",
+                "description": "The identity of the user who triggered the event."
+              },
+              "createdByName": {
+                "type": "string",
+                "description": "The name of the user who triggered the event."
+              },
+              "error": {
+                "type": "string",
+                "description": "Error message if the operation following this log entry failed. Null on success.",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "AppLifecycleAction": {
+        "type": "string",
+        "description": "Represents the type of lifecycle action performed on an app within a tenant.",
+        "x-enumNames": [
+          "Install",
+          "Uninstall",
+          "SubscriptionActivated",
+          "SubscriptionUpdated",
+          "SubscriptionCanceled"
+        ],
+        "enum": [
+          "Install",
+          "Uninstall",
+          "SubscriptionActivated",
+          "SubscriptionUpdated",
+          "SubscriptionCanceled"
+        ]
+      },
+      "QueryAppLifecycleLogsRequest": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PaginationBase"
+          },
+          {
+            "type": "object",
+            "description": "Request model for GET /apps/lifecycle-logs.",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "PaginationResponseDtoOfAppInstanceCompositeDto": {
+        "type": "object",
+        "description": "Class for pagination response DTOs",
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "The list of items for the current page.",
+            "items": {
+              "$ref": "#/components/schemas/AppInstanceCompositeDto"
+            }
+          },
+          "totalItems": {
+            "type": "integer",
+            "description": "The total number of matching items across all pages.",
+            "format": "int64"
+          }
+        }
+      },
+      "QueryAppInstancesRequest": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/PaginationBase"
+          },
+          {
+            "type": "object",
+            "description": "Request model for querying app instances.",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "QueryAppInstanceOverviewsResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/QueryAppInstanceOverviewsQueryResult"
+          },
+          {
+            "type": "object",
+            "description": "Response model for querying app instance overviews.\nInherits from QueryAppInstanceOverviewsQueryResult to include all relevant properties.",
+            "additionalProperties": false
+          }
+        ]
+      },
+      "QueryAppInstanceOverviewsQueryResult": {
+        "type": "object",
+        "description": "Represents the name lookup result for a specific app identifier.",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Gets or sets the unique identifier of the app."
+          },
+          "name": {
+            "type": "string",
+            "description": "Gets or sets the display name of the app."
+          }
+        }
+      },
+      "ProvisionAppResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AppCompositeDto"
+          },
+          {
+            "type": "object",
+            "description": "Represents the response returned after provisioning an app.",
+            "additionalProperties": false,
+            "properties": {
+              "clientSecret": {
+                "type": "string",
+                "description": "Gets or sets the client secret for the app."
+              }
+            }
+          }
+        ]
+      },
+      "ProvisionAppRequest": {
+        "type": "object",
+        "description": "Represents the request to provision an app.",
+        "additionalProperties": false
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "format": "int32",
+            "default": 400
+          },
+          "message": {
+            "type": "string",
+            "default": "One or more errors occurred!"
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "InstallAppRequest": {
+        "type": "object",
+        "description": "Represents the request to install an app.",
+        "additionalProperties": false
+      },
+      "GetAppWithAccessValidationRequest": {
+        "type": "object",
+        "description": "Represents the request to get an app.",
+        "additionalProperties": false
+      },
+      "GetAppListingRequest": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "GetAppInstanceMetadataRequest": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "GetAppInstanceRequest": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "GetAppInfoByClientIdResponse": {
+        "type": "object",
+        "description": "Response returned by the GetAppInfoByClientId endpoint.",
+        "additionalProperties": false,
+        "properties": {
+          "listing": {
+            "description": "The app listing information associated with the client id.",
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AppListingDto"
+              }
+            ]
+          },
+          "instance": {
+            "description": "The app instance information associated with the client id and tenant id.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AppInstanceDto"
+              }
+            ]
+          },
+          "publisher": {
+            "description": "Publisher information for the app.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/PublisherDto"
+              }
+            ]
+          },
+          "providerWebsite": {
+            "type": "string",
+            "description": "The website of the provider.",
+            "nullable": true
+          }
+        }
+      },
+      "GetAppInfoByClientIdRequest": {
+        "type": "object",
+        "description": "Request to retrieve app information by client id.",
+        "additionalProperties": false
+      },
+      "AppActivationCodeDto": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EntityBaseDto"
+          },
+          {
+            "type": "object",
+            "description": "Represents the data transfer object for application activation code information.",
+            "additionalProperties": false,
+            "properties": {
+              "appId": {
+                "type": "string",
+                "description": "Gets or sets the identifier of the application."
+              },
+              "maxRedemptions": {
+                "type": "integer",
+                "description": "Gets or sets the maximum number of redemptions allowed.",
+                "format": "int32",
+                "nullable": true
+              },
+              "redeemedBy": {
+                "type": "array",
+                "description": "Gets or sets the set of identifiers for users who have redeemed the activation code.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "isActive": {
+                "type": "boolean",
+                "description": "Gets or sets a value indicating whether the activation code is active."
+              }
+            }
+          }
+        ]
+      },
+      "GetActivationCodesRequest": {
+        "type": "object",
+        "description": "Represents a request to retrieve activation codes for a specific publisher.",
+        "additionalProperties": false
+      },
+      "DeleteMediaScreenshotRequest": {
+        "type": "object",
+        "description": "Request model for the screenshot delete endpoint.",
+        "additionalProperties": false
+      },
+      "GenerateActivationCodeRequest_GenerateActivationCodeRequestBody": {
+        "type": "object",
+        "description": "Contains the details required to generate an activation code.",
+        "additionalProperties": false,
+        "properties": {
+          "maxRedemptions": {
+            "type": "integer",
+            "description": "Number of times the activation code can be used. If null, the code can be used unlimited times.",
+            "format": "int32",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "description": "Optional code to be used for the activation code. If not provided, a random code will be generated.",
+            "nullable": true
+          }
+        }
+      },
+      "DeleteAppListingRequest": {
+        "type": "object",
+        "description": "Request model for deleting an app listing.",
+        "additionalProperties": false
+      },
+      "DeleteAppImageRequest": {
+        "type": "object",
+        "description": "Request model for deleting an app image.",
+        "additionalProperties": false
+      },
+      "DeleteAppRequest": {
+        "type": "object",
+        "description": "Represents the request to delete an app.",
+        "additionalProperties": false
+      },
+      "DeleteActivationCodeRequest": {
+        "type": "object",
+        "description": "Request model for deleting an activation code associated with an app.",
+        "additionalProperties": false
+      },
+      "DeactivateActivationCodeRequest": {
+        "type": "object",
+        "description": "Request model for deleting an activation code associated with an app.",
+        "additionalProperties": false
+      },
+      "CreateAppPaymentCheckoutSessionResponse": {
+        "type": "object",
+        "description": "Response returned after successfully creating a Stripe Checkout session.",
+        "additionalProperties": false,
+        "properties": {
+          "clientSecret": {
+            "type": "string",
+            "description": "Gets or sets the Stripe Checkout client secret used to initialise the embedded payment UI."
+          }
+        }
+      },
+      "CreateAppPaymentCheckoutSessionRequest": {
+        "type": "object",
+        "description": "Request body for creating a Stripe Checkout session for an app subscription.",
+        "additionalProperties": false,
+        "properties": {
+          "planId": {
+            "type": "string",
+            "description": "Gets or sets the subscription tier ID the tenant wants to subscribe to."
+          },
+          "priceType": {
+            "description": "Gets or sets the price type for the subscription tier.\nThis is needed to determine which Stripe Price ID to use for the checkout session.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SubscriptionTierPriceType"
+              }
+            ]
+          }
+        }
+      },
+      "CreateAppListingRequest": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/AppListingInputDto"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "appId": {
+                "type": "string",
+                "description": "The unique identifier of the app, matching the AppId in the corresponding App Manifest.\nThis is the partition key for the database to ensure all versions of an app are stored together and can be efficiently queried.",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "CreateAppRequest": {
+        "type": "object",
+        "description": "Represents the request to create a new draft app.",
+        "additionalProperties": false,
+        "properties": {
+          "manifest": {
+            "description": "Gets or sets the app manifest.",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/AppManifestInputDto"
+              }
+            ]
+          },
+          "tcAccepted": {
+            "type": "boolean",
+            "description": "Gets or sets whether the terms and conditions have been accepted.\nA value of null or an omitted value means acceptance has not been provided yet\nand the app is still being created as a draft. A value of true records\nacceptance of the terms and conditions.",
+            "nullable": true
+          }
+        }
+      },
+      "ConfigureAppInstanceRequest": {
+        "type": "object",
+        "description": "Represents the request to configure an app instance.",
+        "additionalProperties": false,
+        "properties": {
+          "scopes": {
+            "type": "array",
+            "description": "Sets the scopes to be granted to the app instance.",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "features": {
+            "type": "array",
+            "description": "Sets the features to be granted to the app instance.",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "JWTBearerAuth": {
+        "type": "http",
+        "description": "Enter a JWT token to authorize the requests...",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
